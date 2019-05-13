@@ -21,10 +21,11 @@ export BUILD_pcpurma_cmorph30min2grb=yes
 mkdir $BASE/logs
 export logs_dir=$BASE/logs
 
-. /usrx/local/Modules/default/init/ksh
+#. /usrx/local/Modules/default/init/ksh  #wcoss-phase2
+. /usrx/local/prod/lmod/lmod/init/ksh    #dell
 module purge
 module use -a ${BASE}/../modulefile
-module load URMA/v2.7.0
+module load URMA/v2.7.2
 
 module list
 

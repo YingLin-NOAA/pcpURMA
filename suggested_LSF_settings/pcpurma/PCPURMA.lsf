@@ -1,30 +1,27 @@
-#!/bin/ksh
+#!/bin/bash
 #BSUB -J pcp_urma
-#BSUB -oo /ptmpp2/Ying.Lin/cron.out/urma.%J
-#BSUB -eo /ptmpp2/Ying.Lin/cron.out/urma.%J
-#BSUB -cwd /stmpp1/Ying.Lin
-#BSUB -L /bin/sh
+#BSUB -P RTMA-T2O
+#BSUB -o /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
+#BSUB -e /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
+#BSUB -W 0:45
 #BSUB -n 1
 #BSUB -q "dev"
 #BSUB -R span[ptile=1]
-#BSUB -W 0:45
-#BSUB -P HOURLY-T2O
+
 set -x
 
-. /usrx/local/Modules/3.2.9/init/ksh
-module load prod_util
-module load prod_envir
-module load grib_util/v1.0.2
-module load gempak cfp
+module purge
+module load EnvVars/1.0.2
+module load lsf/10.1
+module load ips/18.0.1.163
+module load impi/18.0.1
+module load CFP/2.0.1
 
-# begin dev for python:
-module use -a /u/Rahul.Mahajan/modulefiles
-module load anaconda/latest
-export PYTHONPATH=/meso/save/Jacob.Carley/python/NCEPy-master/
-export PYTHONPATH=${PYTHONPATH}:/meso/save/Jacob.Carley/python/lib
-#   end dev for python.
+module load prod_util/1.1.0
+module load prod_envir/1.0.2
+module load grib_util/1.0.6
 
-export urma_ver=v2.7.0
+export urma_ver=v2.7.2
 export RUN_ENVIR=dev   # or nco
 export envir=dev       # or prod/para/test
 
@@ -50,6 +47,8 @@ else
   pdyhh=`date -u +%Y%m%d%H`
 fi
 
+export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2
+
 # retro test
 # export pdyhh=2017062819
 # retro test
@@ -66,15 +65,23 @@ if [ $# -ge 2 ]; then
 fi
 
 if [ "$envir" = dev ]; then 
-  export HOMEurma=/meso/save/$LOGNAME/pcpanl/urma.${urma_ver}
-  export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2
-  export NOSCRUBDIR=/meso/noscrub/$LOGNAME/mrms-cmorph.arch
+  export USERHOME=/gpfs/dell2/emc/verification/noscrub/Ying.Lin
+  export HOMEurma=$USERHOME/pcpanl/urma.${urma_ver}
+  export NOSCRUBDIR=$USERHOME/mrms-cmorph.arch
+
+  # begin dev for python:
+  module use -a /u/Rahul.Mahajan/modulefiles
+  module load anaconda/latest
+  export PYTHONPATH=/meso/save/Jacob.Carley/python/NCEPy-master/
+  export PYTHONPATH=${PYTHONPATH}:/meso/save/Jacob.Carley/python/lib
+  # end dev for python.
+
   # outid is what prod uses to name the job output file, e.g.
   # nam_pcpn_anal_2033.o2467312  (outid.$o${pid}
   # below is my approximation to prod outid:
 # 
   $HOMEurma/jobs/JURMA_PCPN
-  $HOMEurma/util.dev/send2rzdm.ksh
+  bsub < $HOMEurma/util.dev/send2rzdm.sh
 else
   /nw${envir}/jobs/JURMA_PCPN
 fi

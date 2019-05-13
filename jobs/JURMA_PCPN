@@ -33,7 +33,15 @@ export MRMSDIR=$DCOMROOT/us007003/ldmdata/obs/upperair/mrms/conus
 
 export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2 
 if [ $RUN_ENVIR = dev ]; then   # for developers
-  . $HOMEurma/config/pcpurma/pcpurma_envir.sh
+  export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/pcpanl
+  export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
+  export COMIN=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
+  export COMOUT=$COMIN
+  export TMPDIR=$DATAROOT/
+  export SENDDBN=NO
+  export SENDDBN_NTC=NO
+  export SENDCOM=YES
+  export SENDDBN=NO
 else                            # for NCO
   export COMINpcpanl=${COMINpcpanl:-/com2/pcpanl/${envir}}
   export COMIN=${COMIN:-${COMROOT?:}/${NET}/${envir}}
@@ -52,7 +60,11 @@ fi
 
 # Shared by dev/NCO:
 # Note that COMIN, COMOUT and COMpcpanl above are prefixes (add $PDY for dirnam)
-export DATA=${DATA:-${DATAROOT:?}/${jobid:?}}
+echo $DATA
+echo $DATAROOT
+echo $jobid
+
+export DATA=${DATAROOT}/${jobid}
 mkdir -p $DATA
 export jlogfile=$DATAROOT/jlogfile
 
@@ -61,6 +73,17 @@ export jlogfile=$DATAROOT/jlogfile
 ####################################
 export pgmout="OUTPUT.$$"
 
+#########################################################################
+# Add some prod utilities to working directory
+#########################################################################
+echo "step ############# break ##############################" > ./break
+cp $UTILROOT/ush/err_chk   .; chmod +x err_chk
+cp $UTILROOT/ush/err_exit  .; chmod +x err_exit
+cp $UTILROOT/ush/prep_step .; chmod +x prep_step
+cp $UTILROOT/ush/postmsg   .; chmod +x postmsg
+cp $UTILROOT/ush/setpdy.sh .; chmod +x setpdy.sh
+
+#########################################
 #########################################
 # Run setpdy and initialize PDY variables
 #########################################
@@ -74,7 +97,14 @@ else                          ### for developer
     export PDY=${pdyhh:0:8}
   fi
   setpdy.sh 9 1  # Create PDY file for PDYm9, PDYm8, ..., PDYp1
-  . PDY 
+  # For some reason the system cannot find the 'PDY' in this directory,
+  # but the problem goes away when I added the follow two lines ('pwd' and 'ls')
+  pwd
+  ls -lt PDY
+  # sometimes waiting 5 seconds before doing ". PDY" works, but sometimes not.
+  # try ". ./PDY":
+  . ./PDY 
+  # test
 fi
 
 ##############################################
@@ -82,6 +112,11 @@ fi
 ##############################################
 
 postmsg $jlogfile "Produce precip URMA files"
+
+# So that we can get to the actual output quickly:
+echo "Actual output starts here:"
+
+date
 
 mkdir -m 775 -p $COMOUT/$RUN.${PDYm9}/wmo
 mkdir -m 775 -p $COMOUT/$RUN.${PDYm8}/wmo

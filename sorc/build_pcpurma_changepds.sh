@@ -5,10 +5,11 @@ set -x
 BASE=`pwd`
 export BASE
 
-. /usrx/local/Modules/default/init/ksh
+#. /usrx/local/Modules/default/init/ksh #wcoss phase-2
+. /usrx/local/prod/lmod/lmod/init/ksh   #dell
 module purge
 module use -a ${BASE}/../modulefile
-module load URMA/v2.7.0
+module load URMA/v2.7.2
 
 module list
 

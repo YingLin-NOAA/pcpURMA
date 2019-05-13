@@ -1,0 +1,65 @@
+#%Module######################################################################
+##                                                       Manuel.Pondeca@noaa.gov
+##                                                           NOAA/NWS/NCEP/EMC
+## URMA v2.7.2
+##_____________________________________________________
+proc ModulesHelp { } {
+puts stderr "Set environment veriables for URMA"
+puts stderr "This module initializes the enviro nment "
+puts stderr "for the Intel Compiler Suite $version\n"
+}
+module-whatis " URMA whatis description"
+
+set ver v2.7.2
+
+set sys [uname sysname]
+#set URMA /nwprod2/urma.v2.7.2/modulefile/URMA
+#set URMA /gpfs/dell1/nco/ops/nwprod/urma.v2.7.2/modulefile/URMA
+set URMA /u/Manuel.Pondeca/modulefiles/URMA
+set lname URMA
+
+# Known conflicts ???
+#conflict bacio/v2.0.0
+#conflict w3nco/v2.0.5
+
+# Loading Intel Compiler Suite
+#module load ics/14.0.2
+module load ips/18.0.1.163
+module load impi/18.0.1
+module load cmake/3.10.0
+
+### is ibmpe needed?  Seems needed for ARW, but kills NMMB build 
+#module load ibmpe
+
+# Loading nceplibs modules
+module load ip/3.0.1
+module load bacio/2.0.2
+module load w3nco/2.0.6
+module load w3emc/2.3.0
+
+module load g2/3.1.0
+module load jasper/1.900.1
+module load libpng/1.2.44
+module load zlib/1.2.11
+
+module load bufr/11.2.0
+
+module load crtm/2.2.6
+module load nemsio/2.2.3
+module load NetCDF/4.5.0
+module load HDF5-serial/1.10.1
+module load sfcio/1.0.0
+module load sigio/2.0.1
+module load sp/2.0.2
+
+
+setenv COMP ifort
+setenv COMP_MP mpif90
+setenv COMP_MPI mpiifort
+
+# user library for pcpurma:
+# setenv WGRIB2LIB /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.7.2/lib/grib2/lib/libwgrib2.a
+# setenv WGRIB2INC /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.7.2/lib/grib2/lib
+# # NCO: please replace the above with the following:
+# # setenv WGRIB2LIB /nw${envir}2/urma.${ver}/lib/grib2/lib/libwgrib2.a
+# # setenv WGRIB2INC /nw${envir}2/urma.${ver}/lib/grib2/lib
