@@ -1,0 +1,1 @@
+ifort -o cmorphgrib.x cmorph30min2grb.f grib2_wrt_g2func.f -convert big_endian -assume byterecl -cpp -L /nwprod/lib -lg2_4 -lw3nco_4 -lw3emc_4 -lbacio_4 -ljasper -lpng -lz

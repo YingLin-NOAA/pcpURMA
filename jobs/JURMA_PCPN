@@ -1,0 +1,114 @@
+#!/bin/sh
+set -x
+
+date
+export PS4=' $SECONDS + '
+echo cyc is ${cyc:?}                 # ensure cyc defined
+echo envir is ${envir:?}             # ensure envir defined
+echo urma_ver is ${urma_ver:?}       # ensure pcpurmaurma_ver defined
+
+###############################################################
+# Specify NET, RUN, and cycle
+###############################################################
+export NET=urma
+export RUN=pcpurma
+export cycle=t${cyc}z
+
+export outid=${RUN}_`date +%H%M`
+export jobid="${outid}.o$$"
+
+####################################
+# Specify paths
+####################################
+# For dev, HOMEurma is set in the dev LSF script. 
+export HOMEurma=${HOMEurma:-${NWROOT:?}/urma.${ver_urma}}
+export FIXurma=$HOMEurma/fix/pcpurma
+export USHurma=$HOMEurma/ush
+# Parm files needed for toc2grib2, to add WMO header:
+export PARMurma=$HOMEurma/parm/pcpurma
+export EXECurma=$HOMEurma/exec
+export SCRIPTurma=$HOMEurma/scripts/pcpurma
+
+export MRMSDIR=$DCOMROOT/us007003/ldmdata/obs/upperair/mrms/conus
+
+export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2 
+if [ $RUN_ENVIR = dev ]; then   # for developers
+  . $HOMEurma/config/pcpurma/pcpurma_envir.sh
+else                            # for NCO
+  export COMINpcpanl=${COMINpcpanl:-/com2/pcpanl/${envir}}
+  export COMIN=${COMIN:-${COMROOT?:}/${NET}/${envir}}
+  export COMOUT=${COMOUT:-$COMROOT/${NET}/${envir}}
+# Starting in v2.7.0: send pcpurma files with WMO headers to 
+#   $COMOUT/${RUN}.$day0/wmo/ instead of PCOM
+#  export PCOM=${PCOM:-$PCOMROOT/${NET}}/${RUN}
+  ####################################
+  # SENDCOM  - Copy Files From TMPDIR to $com
+  # SENDDBN  - Send files to OSO
+  ####################################
+  export SENDCOM=${SENDCOM:-YES}
+  export SENDDBN=${SENDDBN:-YES}
+  export SENDDBN_NTC=${SENDDBN_NTC:-YES}
+fi
+
+# Shared by dev/NCO:
+# Note that COMIN, COMOUT and COMpcpanl above are prefixes (add $PDY for dirnam)
+export DATA=${DATA:-${DATAROOT:?}/${jobid:?}}
+mkdir -p $DATA
+export jlogfile=$DATAROOT/jlogfile
+
+####################################
+# Determine Job Output Name on System
+####################################
+export pgmout="OUTPUT.$$"
+
+#########################################
+# Run setpdy and initialize PDY variables
+#########################################
+cd $DATA
+
+if [ "${RUN_ENVIR,,}" = "nco" ]; then  ### for prod/para/test (all non-dev)
+  setpdy.sh 9 1
+  . PDY
+else                          ### for developer
+  if [ $retro = Y ]; then
+    export PDY=${pdyhh:0:8}
+  fi
+  setpdy.sh 9 1  # Create PDY file for PDYm9, PDYm8, ..., PDYp1
+  . PDY 
+fi
+
+##############################################
+# Define COM directories
+##############################################
+
+postmsg $jlogfile "Produce precip URMA files"
+
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm9}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm8}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm7}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm6}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm5}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm4}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm3}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm2}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDYm1}/wmo
+mkdir -m 775 -p $COMOUT/$RUN.${PDY}/wmo
+
+env
+
+# So that we can get to the actual output quickly:
+echo "Actual output starts here:"
+
+date
+
+#############################################################
+# Execute the script.
+#############################################################
+$SCRIPTurma/exurma_pcpn.sh
+
+postmsg $jlogfile "$0 completed normally"
+
+if [ "${KEEPDATA^^}" != YES ]; then
+  rm -rf $DATA
+fi
+

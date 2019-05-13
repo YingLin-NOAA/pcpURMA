@@ -1,0 +1,11 @@
+WMO headers in this directory:
+  grib2_pcpurma_g184.06h - ConUS  6h URMA (was grib2_urmapcpn_ndfd.184)
+  grib2_pcpurma_g188.06h - NWRFC  6h URMA (was grib2_urmapcpn_ndfd.188)
+  grib2_pcpurma_g195.06h - Puerto Rico 6h URMA (was grib2_urmapcpn_ndfd.195)
+  grib2_pcpurma_g91.06h  - Alaska      6h URMA (was grib2_urmapcpn_ndfd.91)
+  grib2_pcpurma_g184.01h - ConUS       1h URMA
+  grib2_pcpurma_g188.01h - NWRFC       1h URMA
+  grib2_pcpurma_g195.01h - Puerto Rico 1h URMA
+
+GRIB2 table for APCP (not a WMO header): 
+  grib2_pds.tbl
