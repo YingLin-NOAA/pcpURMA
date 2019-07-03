@@ -21,7 +21,7 @@ module load prod_util/1.1.0
 module load prod_envir/1.0.2
 module load grib_util/1.0.6
 
-export urma_ver=v2.7.2
+export urma_ver=v2.7.3
 export RUN_ENVIR=dev   # or nco
 export envir=dev       # or prod/para/test
 
@@ -47,10 +47,8 @@ else
   pdyhh=`date -u +%Y%m%d%H`
 fi
 
-export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2
-
 # retro test
-# export pdyhh=2017062819
+# export pdyhh=2019062416
 # retro test
 export cyc=`echo $pdyhh | cut -c 9-10`
 

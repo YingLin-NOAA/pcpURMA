@@ -1,7 +1,7 @@
 #%Module######################################################################
 ##                                                       Manuel.Pondeca@noaa.gov
 ##                                                           NOAA/NWS/NCEP/EMC
-## URMA v2.7.2
+## URMA v2.7.3
 ##_____________________________________________________
 proc ModulesHelp { } {
 puts stderr "Set environment veriables for URMA"
@@ -10,7 +10,7 @@ puts stderr "for the Intel Compiler Suite $version\n"
 }
 module-whatis " URMA whatis description"
 
-set ver v2.7.2
+set ver v2.7.3
 
 set sys [uname sysname]
 #set URMA /nwprod2/urma.v2.7.2/modulefile/URMA
@@ -56,10 +56,3 @@ module load sp/2.0.2
 setenv COMP ifort
 setenv COMP_MP mpif90
 setenv COMP_MPI mpiifort
-
-# user library for pcpurma:
-# setenv WGRIB2LIB /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.7.2/lib/grib2/lib/libwgrib2.a
-# setenv WGRIB2INC /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.7.2/lib/grib2/lib
-# # NCO: please replace the above with the following:
-# # setenv WGRIB2LIB /nw${envir}2/urma.${ver}/lib/grib2/lib/libwgrib2.a
-# # setenv WGRIB2INC /nw${envir}2/urma.${ver}/lib/grib2/lib

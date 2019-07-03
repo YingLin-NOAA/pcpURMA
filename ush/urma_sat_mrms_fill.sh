@@ -21,7 +21,7 @@ if [ $err1 = 0 -a $err2 = 0 ]
 then
   # Both MRMS and CMORPH exist
   rm -f sto_* tmp*.grb2
-  $MYWGRIB2 \
+  $WGRIB2 \
   -set_grib_type c1 $urmaunfilled -rpn sto_0 \
   -import_grib $FIXurma/rfcmask_wexp.grb2 \
   -rpn "149:>:rcl_0:swap:mask:sto_1" -grib_out tmp1.grb2 \
@@ -32,7 +32,7 @@ then
 
   # Make a data mask:
   rm -f sto_* tmp*.grb2
-  $MYWGRIB2 \
+  $WGRIB2 \
   -set_grib_type c1 $urmaunfilled -rpn sto_0 \
   -import_grib $FIXurma/rfcmask_wexp.grb2 \
   -rpn "rcl_0:0:*:+" -grib_out sto_1 \
@@ -62,7 +62,7 @@ then
 
   # fill with a single field, mrms or cmorph:
   rm -f sto_* tmp*.grb2
-  $MYWGRIB2 \
+  $WGRIB2 \
   -set_grib_type c1 $urmaunfilled -rpn sto_0 \
   -import_grib $FIXurma/rfcmask_wexp.grb2 \
   -rpn "149:>:rcl_0:swap:mask:sto_1" -grib_out tmp1.grb2 \
@@ -71,7 +71,7 @@ then
 
   # Make a data mask:
   rm -f sto_* tmp*.grb2
-  $MYWGRIB2 \
+  $WGRIB2 \
   -set_grib_type c1 $urmaunfilled -rpn sto_0 \
   -import_grib $FIXurma/rfcmask_wexp.grb2 \
   -rpn "rcl_0:0:*:+" -grib_out sto_1 \

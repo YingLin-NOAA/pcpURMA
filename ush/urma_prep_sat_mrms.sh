@@ -114,7 +114,7 @@ ioEOF
         err=$? 
         if [ $err -eq 0 ]; then
           gunzip $rawmrms
-          $MYWGRIB2 $rawmrms -rpn "dup:-3:!=:mask" -set_scaling -1 0 -set_bitmap 1 -set_grib_type c3 -grib_out mrms.$date
+          $WGRIB2 $rawmrms -rpn "dup:-3:!=:mask" -set_scaling -1 0 -set_bitmap 1 -set_grib_type c3 -grib_out mrms.$date
           gzip -c mrms.$date > $COMOUT/${RUN}.$day/mrms.$date.gz
         fi
       fi # does the pre-RQI'd mrms.$date exist?

@@ -29,9 +29,8 @@ export PARMurma=$HOMEurma/parm/pcpurma
 export EXECurma=$HOMEurma/exec
 export SCRIPTurma=$HOMEurma/scripts/pcpurma
 
-export MRMSDIR=$DCOMROOT/us007003/ldmdata/obs/upperair/mrms/conus
+export MRMSDIR=$DCOMROOT/prod/ldmdata/obs/upperair/mrms/conus
 
-export MYWGRIB2=$HOMEurma/lib/grib2/wgrib2/wgrib2 
 if [ $RUN_ENVIR = dev ]; then   # for developers
   export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/pcpanl
   export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl

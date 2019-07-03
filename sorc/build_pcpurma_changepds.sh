@@ -9,7 +9,7 @@ export BASE
 . /usrx/local/prod/lmod/lmod/init/ksh   #dell
 module purge
 module use -a ${BASE}/../modulefile
-module load URMA/v2.7.2
+module load URMA/v2.7.3
 
 module list
 
