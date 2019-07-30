@@ -84,7 +84,6 @@
 !
       nerr=0
       read(5,'(a10)',err=101) vdate
-      write(6,*) 'check 1'
 !
 !  Read in GRIB2 table to APCP:
       do k = 1, 42
@@ -98,7 +97,6 @@
 !
 !      write(6,*) 'cmchar1(1,1)=', cmchar1(1,1)
 !      write(6,*) 'ichar(cmchar1(1,1))=', ichar(cmchar1(1,1))
-      write(6,*) 'check 2'
       do jrev = ny, 1, -1
       do i = 1, nx
 !        length1=len_trim(cmchar1(i,jrev))
@@ -122,7 +120,6 @@
         endif
       enddo
       enddo
-      write(6,*) 'check 3'
 
       go to 10
  101  write(6,*) 'Error reading yyyymmddhh from Unit 5'
@@ -184,7 +181,6 @@
       KGDS(20)= 255
       KGDS(21)= 0
       KGDS(22)= 0
-      write(6,*) 'check 4'
 !
 !  Output GRIB version of the CMORPH analysis, if there hasn't been any
 !  read error(s)

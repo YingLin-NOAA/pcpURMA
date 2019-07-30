@@ -1,8 +1,8 @@
 #!/bin/bash
-#BSUB -J pcp_urma
+#BSUB -J pcp_urma2p8
 #BSUB -P RTMA-T2O
-#BSUB -o /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
-#BSUB -e /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
+#BSUB -o /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma2p8.%J
+#BSUB -e /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma2p8.%J
 #BSUB -W 0:45
 #BSUB -n 1
 #BSUB -q "dev"
@@ -21,7 +21,7 @@ module load prod_util/1.1.0
 module load prod_envir/1.0.2
 module load grib_util/1.0.6
 
-export urma_ver=v2.7.3
+export urma_ver=v2.8.0
 export RUN_ENVIR=dev   # or nco
 export envir=dev       # or prod/para/test
 
@@ -66,13 +66,6 @@ if [ "$envir" = dev ]; then
   export USERHOME=/gpfs/dell2/emc/verification/noscrub/Ying.Lin
   export HOMEurma=$USERHOME/pcpanl/urma.${urma_ver}
   export NOSCRUBDIR=$USERHOME/mrms-cmorph.arch
-
-  # begin dev for python:
-  module use -a /u/Rahul.Mahajan/modulefiles
-  module load anaconda/latest
-  export PYTHONPATH=/meso/save/Jacob.Carley/python/NCEPy-master/
-  export PYTHONPATH=${PYTHONPATH}:/meso/save/Jacob.Carley/python/lib
-  # end dev for python.
 
   # outid is what prod uses to name the job output file, e.g.
   # nam_pcpn_anal_2033.o2467312  (outid.$o${pid}

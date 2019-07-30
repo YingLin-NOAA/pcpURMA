@@ -30,11 +30,17 @@ export EXECurma=$HOMEurma/exec
 export SCRIPTurma=$HOMEurma/scripts/pcpurma
 
 export MRMSDIR=$DCOMROOT/prod/ldmdata/obs/upperair/mrms/conus
+export DCOMSNOW=/gpfs/dell2/ptmp/Ying.Lin/dcom/prod
+
+####################################
+# finddate.sh is not in prod_util, but prod_util does define UTIL_ROOT:
+####################################
+export FINDDATE=$UTILROOT/ush/finddate.sh
 
 if [ $RUN_ENVIR = dev ]; then   # for developers
-  export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/pcpanl
-  export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
-  export COMIN=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
+  export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/urma_2p8
+  export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl_2p8
+  export COMIN=/gpfs/dell2/ptmp/$LOGNAME/pcpanl_2p8
   export COMOUT=$COMIN
   export TMPDIR=$DATAROOT/
   export SENDDBN=NO
@@ -75,6 +81,7 @@ export pgmout="OUTPUT.$$"
 #########################################################################
 # Add some prod utilities to working directory
 #########################################################################
+cd $DATA
 echo "step ############# break ##############################" > ./break
 cp $UTILROOT/ush/err_chk   .; chmod +x err_chk
 cp $UTILROOT/ush/err_exit  .; chmod +x err_exit
@@ -138,7 +145,8 @@ date
 #############################################################
 # Execute the script.
 #############################################################
-$SCRIPTurma/exurma_pcpn.sh
+#$SCRIPTurma/exurma_pcpn.sh
+$SCRIPTurma/exurma_snow.sh
 
 postmsg $jlogfile "$0 completed normally"
 
