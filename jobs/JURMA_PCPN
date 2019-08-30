@@ -38,9 +38,9 @@ export DCOMSNOW=/gpfs/dell2/ptmp/Ying.Lin/dcom/prod
 export FINDDATE=$UTILROOT/ush/finddate.sh
 
 if [ $RUN_ENVIR = dev ]; then   # for developers
-  export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/urma_2p8
-  export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl_2p8
-  export COMIN=/gpfs/dell2/ptmp/$LOGNAME/pcpanl_2p8
+  export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/pcpanl
+  export COMINpcpanl=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
+  export COMIN=/gpfs/dell2/ptmp/$LOGNAME/pcpanl
   export COMOUT=$COMIN
   export TMPDIR=$DATAROOT/
   export SENDDBN=NO
@@ -117,11 +117,6 @@ fi
 # Define COM directories
 ##############################################
 
-postmsg $jlogfile "Produce precip URMA files"
-
-# So that we can get to the actual output quickly:
-echo "Actual output starts here:"
-
 date
 
 mkdir -m 775 -p $COMOUT/$RUN.${PDYm9}/wmo
@@ -143,12 +138,14 @@ echo "Actual output starts here:"
 date
 
 #############################################################
-# Execute the script.
+# Execute the scripts.  Run snow processing first since it does not take long.
 #############################################################
-#$SCRIPTurma/exurma_pcpn.sh
-$SCRIPTurma/exurma_snow.sh
 
-postmsg $jlogfile "$0 completed normally"
+if [ $cyc = 19 ]; then
+  $SCRIPTurma/exurma_snow.sh
+fi
+
+$SCRIPTurma/exurma_pcpn.sh
 
 if [ "${KEEPDATA^^}" != YES ]; then
   rm -rf $DATA

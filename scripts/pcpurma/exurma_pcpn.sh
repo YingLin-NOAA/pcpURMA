@@ -42,12 +42,12 @@ pwd
 # process the URMA file by going through a list produced by the pcpanl file:
 
 # The 2345x1597 west-expanded ConUS grid (wexp):
-export NDFDwexp="30 1 0 6371200 0 0 0 0 2345 1597  19228976 233723448 8 25000000 265000000 2539703 2539703 0 64 25000000 25000000 -90000000 0"
+# For wgrib2's new_grid: 
 
-# ConUS grid (NDFDgrid184 is created for ush/urma_prep_sat_mrms.sh):
-export NDFDgrid184="30 1 0 6371200 0 0 0 0 2145 1377  20191999 238445999 8 25000000 265000000 2539703 2539703 0 64 25000000 25000000 -90000000 0"
-# NWRFC grid: 
-NDFDgrid188="30 1 0 6371200 0 0 0 0 709 795 37979684 234042704  8 25000000 265000000 2539703 2539703 0 64 25000000 25000000 -90000000 0"
+WG2wexp="lambert:265:25:25 233.723448:2345:2539.703 19.228976:1597:2539.703"
+WG2ak="nps:210.0:60.0 181.429:1649:2976.0 40.530:1105:2976.0"
+WG2pr="mercator:20.00 291.804700:353:1250.0:296.015500 16.828700:257:1250.0:19.736200"
+WG2pack="c1 -set_bitmap 1"
 
 # Prepare CMORPH and MRMS data for URMA:
 $USHurma/urma_prep_sat_mrms.sh
@@ -60,41 +60,31 @@ do
   day=`echo $item | cut -c1-8`
   ac=`echo $item | awk -F"." '{print $2}'`
   region=`echo $item | awk -F"." '{print $3}'`
-  
+
+  st4file=st4_${region}.$date.$ac.grb2
   if [ $region = conus ]; then
-    ST4file=ST4.$date.$ac
     urmawexp=pcpurma_wexp.$date.$ac.grb2
     urma184=pcpurma_g184.$date.$ac.grb2
     urma188=pcpurma_g188.$date.$ac.grb2
   else
-    ST4file=st4_${region}.$date.$ac
     urmafile=pcpurma_${region}.$date.$ac.grb2
   fi
 
-  cp $COMINpcpanl/pcpanl.$day/$ST4file.gz .
-  gunzip $ST4file.gz
+  cp $COMINpcpanl/pcpanl.$day/$st4file .
   err=$?
   if [ $err -ne 0 ]; then
-    echo $ST4file.gz does not exist or cannot be gunzipped.  Skip this for URMA.
+    echo $st4file does not exist.  Skip this for URMA.
     break
   fi
-  
-  # Change the generating process number, PDS(2) from 182 (Stage IV) to 118
-  # (URMA products); also change the time range setting from the RFC convention
-  # for 6h QPE (as 00-06, 06-12, 12-18, 18-24h 'forecasts' from 12Z) to
-  # straightforward 06h accumulation.
-
-  ln -sf $ST4file                     fort.11
-  ln -sf $ST4file.chgdpds             fort.51
-  ${EXECurma}/pcpurma_changepds
-  export err=$?;err_chk
-  echo '     err=' $? 
-  # Convert to GRIB2:
-  $CNVGRIB -g12 $ST4file.chgdpds ${ST4file}.gb2
 
   if [ $region = conus ]; then
     # map to the 2.5km 2345x1597 west-expanded ConUS grid (wexp)
-    $COPYGB2 -g "$NDFDwexp" -i3 -x ${ST4file}.gb2 $urmawexp
+    $WGRIB2 $st4file \
+      -set_grib_type ${WG2pack} \
+      -new_grid_winds grid \
+      -new_grid_interpolation budget \
+      -new_grid ${WG2wexp} \
+      $urmawexp
 
     # If valid time is at least 24h ago, fill in with MRMS and CMORPH:
     if [ $date -le $date0m24h ]
@@ -102,37 +92,33 @@ do
       $USHurma/urma_sat_mrms_fill.sh $date $ac $urmawexp
     fi
 
-    # Use copygb nearest neighbor to map $urmawexp to g184 and g188:
-    # Map to 2.5km ConUS NDFD grid:
-    $COPYGB2 -g "$NDFDgrid184" -i2 -x $urmawexp $urma184
+    # Use wgrib2 to produce NDFD subsets (g184 and g188) from the large wexp 
+    # grid for AWIPS.
+    #   g184(i,j) = wexp(i+200,j)
+    #   g188(i,j) = wexp(i+200,j+802)
+    # 
+    #   g184(1,1) = wexp(201,1)
+    #   g184(2145,1377) = wexp(2345,1377)
+    # 
+    #   g188(1,1) = wexp(201,803)
+    #   g188(709,795) = wexp(909,1597)
+
+    $WGRIB2 $urmawexp -ijsmall_grib 201:2345 1:1377  $urma184
     wmohdrconus=grib2_pcpurma_g184.$ac
 
     # Map to 2.5km NWRFC NDFD grid:
-    $COPYGB2 -g "$NDFDgrid188" -i2 -x $urmawexp $urma188
+    $WGRIB2 $urmawexp -ijsmall_grib 201:909 803:1597 $urma188 
     wmohdrnwrfc=grib2_pcpurma_g188.$ac
 
   elif [ $region = pr ]; then
-    NDFDgrid="10 1 0 6371200 0 0 0 0 177 129 16828685 291804687 56 20000000 19747399 296027600 64 0 2500000 2500000"
-    wmoheader=grib2_pcpurma_g195.$ac
+    wmoheader=grib2_pcpurma_prico_125km.$ac
+    WG2oconus=$WG2pr
   elif [ $region = ak ]; then
-    NDFDgrid="20 1 0 6371200 0 0 0 0 1649 1105 40530101 181429000 8 60000000 210000000 2976563 2976563 0 64"
     # AK URMA is 06h only, but use $ac, (in case there's a script error, '01h' 
     # would be a tip-off)
     wmoheader=grib2_pcpurma_g91.$ac
+    WG2oconus=$WG2ak
   fi # ConUS, PR or AK?
-
-  # Change the generating process number, PDS(2) from 182 (Stage IV) to 118
-  # (URMA products); for 6h URMA, also change the time range setting from the 
-  # RFC convention for 6h QPE (as 00-06, 06-12, 12-18, 18-24h 'forecasts' 
-  # from 12Z) to straightforward 06h accumulation.
-
-  ln -sf $ST4file                     fort.11
-  ln -sf $ST4file.chgdpds             fort.51
-  ${EXECurma}/pcpurma_changepds
-  export err=$?;err_chk
-  echo '     err=' $? 
-# Convert to GRIB2:
-  $CNVGRIB -g12 $ST4file.chgdpds ${ST4file}.gb2
 
   if [ $region = conus ]; then
       
@@ -182,7 +168,12 @@ do
     echo '     err=' $? 
 
   else # PR or AK
-    $COPYGB2 -g "$NDFDgrid" -i3 -x ${ST4file}.gb2 $urmafile
+    $WGRIB2 $st4file \
+      -set_grib_type ${WG2pack} \
+      -new_grid_winds grid \
+      -new_grid_interpolation budget \
+      -new_grid ${WG2oconus} \
+      $urmafile
     #####################################################################
     #    Process PRECIP URMA FOR AWIPS
     #####################################################################

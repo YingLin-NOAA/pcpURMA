@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/sh
 #######################################################################
 #  Purpose: add WMO header to NOHRSC 6h/24h snowfall analysis
 #######################################################################
@@ -30,6 +30,10 @@ cd $DATA
 
 pwd
 
+# For wgrib2's new_grid: 
+WG2wexp="lambert:265:25:25 233.723448:2345:2539.703 19.228976:1597:2539.703"
+WG2pack="c1 -set_bitmap 1"
+
 # process the NOHRSC files: for 6h/24h snowfall analysis covering a 24h period
 # ending at 12Z $day (day=PDY, PDYm1, PDYm2, PDYm3, PDYm5, PDYm7), add WMO 
 # header to each file
@@ -51,7 +55,7 @@ do
     vhr=${vdate:8:2}
     cp $DCOMSNOW/$vday/wgrbbul/qpe/$snow6h .
     if [ -s $snow6h ]; then
-      echo $vdate.6h >> $todolist
+      echo $vdate.06h >> $todolist
     fi
 
     if [ $vhr -eq 12 ]; then
@@ -93,16 +97,20 @@ do
   vday=${vdate:0:8}
   vhr=${vdate:8:2}
   ac=`echo $tmp | awk -F"." '{print $2}'`
-  nohrscfile=sfav2_CONUS_${ac}_${vdate}_grid184.grb2
-
-  if [ $ac = 6h ]; then
-    snowparm=$PARMurma/grib2_sfav2_asnow_g184.06h
-    awipsfile=grib2.${vday}.t${vhr}z.snowfall.184.06h
-  else
-    snowparm=$PARMurma/grib2_sfav2_asnow_g184.24h
-    awipsfile=grib2.${vday}.t${vhr}z.snowfall.184.24h
+  
+  # note that the original NOHRSC file name has '6h' and '24h' and we'd like
+  # to use '06h' and '24h'.  From the to do list we read in ac as '06h/24h', 
+  # so when referring to the original NORHSC file, use 'ac_nohrsc', which is 
+  # either '6h' or '24h'.
+  if [ $ac = 06h ]; then
+    ac_nohrsc=6h
+  elif [ $ac = 24h ]; then
+    ac_nohrsc=24h
   fi
-
+  nohrscfile=sfav2_CONUS_${ac_nohrsc}_${vdate}_grid184.grb2
+  snowparm=$PARMurma/grib2_sfav2_asnow_g184.$ac
+  awipsfile=grib2.${vday}.t${vhr}z.snowfall.184.$ac
+    
   # Add WMO header:
   export pgm=tocgrib2
   . prep_step
@@ -114,16 +122,26 @@ do
   export err=$?;err_chk
   echo '     err=' $? 
 
+# Map the g184 analysis to wexp grid using wgrib2.  Since we're adding extra 
+# columns/rows to the grid, use 'neighbor' (Values from nearest grid point)
+# option: 
+  $WGRIB2 $nohrscfile \
+    -set_grib_type ${WG2pack} \
+    -new_grid_interpolation neighbor \
+    -new_grid ${WG2wexp} \
+     snowfall_wexp.$vdate.$ac.grb2
+
   if test $SENDCOM = 'YES'
   then
     cp $nohrscfile $COMOUT/${RUN}.$vday/.
     cp $awipsfile  $COMOUT/${RUN}.$vday/wmo/.
+    cp snowfall_wexp.$vdate.$ac.grb2 $COMOUT/${RUN}.$vday/.
   fi   # SENDCOM?
 
   if test $SENDDBN = 'YES'
   then
     # SEND URMA snowfall files to nomads.ncep.noaa.gov.  
-    $DBNROOT/bin/dbn_alert MODEL URMASNOWFALL_GB2 $job $COMOUT/${RUN}.$vday/$nohrscfile
+    $DBNROOT/bin/dbn_alert MODEL URMASNOWFALL_GB2 $job $COMOUT/${RUN}.$vday/snowfall_wexp.$vdate.$ac.grb2
   fi   # SENDDBN?
 
 # to TOC/AWIPS:

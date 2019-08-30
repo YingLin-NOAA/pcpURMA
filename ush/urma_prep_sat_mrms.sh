@@ -147,7 +147,7 @@ ioEOF
       if [ -s mrms.$date -a $rqierr -eq 0 ]; then
         # if the RQI is available, use it to screen out MRMS points where
         # RQI < 0.5:
-        $MYWGRIB2 \
+        $WGRIB2 \
         -set_grib_type c1 mrms.$date -rpn sto_0 \
         -set_bitmap 1 -import_grib $rqifile \
         -rpn "0.09:>:rcl_0:swap:mask:sto_1" -grib_out mrmsrqid.$date

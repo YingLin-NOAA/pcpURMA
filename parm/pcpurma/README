@@ -1,11 +1,14 @@
 WMO headers in this directory:
-  grib2_pcpurma_g184.06h - ConUS  6h URMA (was grib2_urmapcpn_ndfd.184)
-  grib2_pcpurma_g188.06h - NWRFC  6h URMA (was grib2_urmapcpn_ndfd.188)
-  grib2_pcpurma_g195.06h - Puerto Rico 6h URMA (was grib2_urmapcpn_ndfd.195)
-  grib2_pcpurma_g91.06h  - Alaska      6h URMA (was grib2_urmapcpn_ndfd.91)
-  grib2_pcpurma_g184.01h - ConUS       1h URMA
-  grib2_pcpurma_g188.01h - NWRFC       1h URMA
-  grib2_pcpurma_g195.01h - Puerto Rico 1h URMA
+  grib2_pcpurma_g184.06h -          ConUS  6h URMA (was grib2_urmapcpn_ndfd.184)
+  grib2_pcpurma_g188.06h -          NWRFC  6h URMA (was grib2_urmapcpn_ndfd.188)
+  grib2_pcpurma_g184.01h -          ConUS  1h URMA
+  grib2_pcpurma_g188.01h -          NWRFC  1h URMA
+  grib2_pcpurma_g91.06h  -          Alaska 6h URMA (was grib2_urmapcpn_ndfd.91)
+  grib2_pcpurma_prico_125km.06h -   PR 1.25km 06h
+  grib2_pcpurma_prico_125km.01h -   PR 1.25km 01h
+  grib2_sfav2_asnow_g184.06h    -   NOHRSC snow 6h
+  grib2_sfav2_asnow_g184.24h    -   NOHRSC snow 24h
+
 
 GRIB2 table for APCP (not a WMO header): 
   grib2_pds.tbl
