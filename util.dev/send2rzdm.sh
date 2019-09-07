@@ -68,7 +68,7 @@ do
     
   RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0/pcpurma.$day
   ssh wd22yl@emcrzdm "mkdir -p $RZDMDIR"
-  cd $COMOUTurma/${RUN}.$day
+  cd $COMOUT/pcpurma.$day
   scp $urmafile wd22yl@emcrzdm:$RZDMDIR/.
 
   # only ConUS files older than 24h has a mask:

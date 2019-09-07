@@ -81,6 +81,7 @@ do
     # map to the 2.5km 2345x1597 west-expanded ConUS grid (wexp)
     $WGRIB2 $st4file \
       -set_grib_type ${WG2pack} \
+      -set analysis_or_forecast_process_id 118 \
       -new_grid_winds grid \
       -new_grid_interpolation budget \
       -new_grid ${WG2wexp} \
@@ -152,7 +153,7 @@ do
     export FORT31=" "
     export FORT51="grib2.${day}.t${hh}z.awpurmapcp.184.$ac"
     startmsg
-    $TOCGRIB2 < $PARMurma/$wmohdrconus
+#    $TOCGRIB2 < $PARMurma/$wmohdrconus
     export err=$?;err_chk
     echo '     err=' $? 
 
@@ -163,13 +164,14 @@ do
     export FORT31=" "
     export FORT51="grib2.$day.t${hh}z.awpurmapcp.188.$ac"
     startmsg
-    $TOCGRIB2 < $PARMurma/$wmohdrnwrfc
+#    $TOCGRIB2 < $PARMurma/$wmohdrnwrfc
     export err=$?;err_chk
     echo '     err=' $? 
 
   else # PR or AK
     $WGRIB2 $st4file \
       -set_grib_type ${WG2pack} \
+      -set analysis_or_forecast_process_id 118 \
       -new_grid_winds grid \
       -new_grid_interpolation budget \
       -new_grid ${WG2oconus} \
@@ -186,7 +188,7 @@ do
     export FORT31=" "
     export FORT51="grib2.$day.t${hh}z.awpurmapcp.$region.$ac"
     startmsg
-    $TOCGRIB2 < $PARMurma/$wmoheader
+#    $TOCGRIB2 < $PARMurma/$wmoheader
     export err=$?; echo "After $pgm, err=$err"; err_chk
   fi
 
