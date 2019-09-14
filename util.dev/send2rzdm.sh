@@ -36,16 +36,17 @@ COMOUT=/gpfs/dell2/ptmp/Ying.Lin/pcpanl
 todosnow=$COMOUT/pcpurma.$day0/todo_snow.$date0
 todourma=$COMOUT/pcpanl.$day0/todo_urma.$date0
 
+RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0
+
 for item in `cat $todosnow`
 do
   vdate=`echo $item | awk -F"." '{print $1}'`
   vday=${vdate:0:8}
   vhr=${vdate:8:2}
-  ac=`echo $item | awk -F"." '{print $2}'`
-  snowfile=snowfall_wexp.$vdate.$ac.grb2 
-  awipsfile=grib2.${vday}.t${vhr}z.snowfall.184.$ac
+  acc=`echo $item | awk -F"." '{print $2}'`
+  snowfile=snowfall_wexp.$vdate.$acc.grb2 
+  awipsfile=grib2.t${vhr}z.snowfall.184.$acc
 
-  RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0
   ssh wd22yl@emcrzdm "mkdir -p $RZDMDIR/pcpurma.$vday/wmo"
   cd $COMOUT/pcpurma.$vday
   scp $snowfile wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/.
@@ -55,25 +56,32 @@ done
 
 for item in `cat $todourma`
 do
-  date=`echo $item | cut -c 1-10`
-  day=`echo $item | cut -c 1-8`
+  vdate=`echo $item | cut -c 1-10`
+  vday=`echo $item | cut -c 1-8`
+  vhr=${vdate:8:2}
+  ssh wd22yl@emcrzdm "mkdir -p $RZDMDIR/pcpurma.$vday/wmo"
   acc=`echo $item | cut -c 12-14`
   region=`echo $item | awk -F"." '{print $3}'`
   if [ $region = conus ]; then
-    urmafile=pcpurma_wexp.${date}.$acc.grb2
-    urmamask=pcpurma_mask.${date}.$acc.grb2
+    urmafile=pcpurma_wexp.${vdate}.$acc.grb2
+    urmamask=pcpurma_mask.${vdate}.$acc.grb2
+    awips184=grib2.t${vhr}z.awpurmapcp.184.$acc
+    awips188=grib2.t${vhr}z.awpurmapcp.188.$acc
+    cd $COMOUT/pcpurma.$vday/wmo
+    scp $awips184 $awips188 wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/wmo/.
   else
     urmafile=pcpurma_${region}.${date}.$acc.grb2
+    awipsfile=grib2.t${vhr}z.awpurmapcp.$region.$acc
+    cd $COMOUT/pcpurma.$vday/wmo
+    scp $awipsfile wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/wmo/.
   fi
     
-  RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0/pcpurma.$day
-  ssh wd22yl@emcrzdm "mkdir -p $RZDMDIR"
-  cd $COMOUT/pcpurma.$day
-  scp $urmafile wd22yl@emcrzdm:$RZDMDIR/.
+  cd $COMOUT/pcpurma.$vday
+  scp $urmafile wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/.
 
   # only ConUS files older than 24h has a mask:
   if [[ $region = conus && -s $urmamask ]]; then
-    scp $urmamask wd22yl@emcrzdm:$RZDMDIR/.
+    scp $urmamask wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/.
   fi
 done
 

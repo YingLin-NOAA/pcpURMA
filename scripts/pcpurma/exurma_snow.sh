@@ -109,7 +109,7 @@ do
   fi
   nohrscfile=sfav2_CONUS_${ac_nohrsc}_${vdate}_grid184.grb2
   snowparm=$PARMurma/grib2_sfav2_asnow_g184.$ac
-  awipsfile=grib2.${vday}.t${vhr}z.snowfall.184.$ac
+  awipsfile=grib2.t${vhr}z.snowfall.184.$ac
     
   # Add WMO header:
   export pgm=tocgrib2

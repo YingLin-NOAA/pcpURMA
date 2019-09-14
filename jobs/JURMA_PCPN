@@ -141,7 +141,7 @@ date
 # Execute the scripts.  Run snow processing first since it does not take long.
 #############################################################
 
-if [ $cyc = 19 ]; then
+if [ $cyc = 18 ]; then
   $SCRIPTurma/exurma_snow.sh
 fi
 

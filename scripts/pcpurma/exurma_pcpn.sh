@@ -153,7 +153,7 @@ do
     export FORT31=" "
     export FORT51="grib2.${day}.t${hh}z.awpurmapcp.184.$ac"
     startmsg
-#    $TOCGRIB2 < $PARMurma/$wmohdrconus
+    $TOCGRIB2 < $PARMurma/$wmohdrconus
     export err=$?;err_chk
     echo '     err=' $? 
 
@@ -164,7 +164,7 @@ do
     export FORT31=" "
     export FORT51="grib2.$day.t${hh}z.awpurmapcp.188.$ac"
     startmsg
-#    $TOCGRIB2 < $PARMurma/$wmohdrnwrfc
+    $TOCGRIB2 < $PARMurma/$wmohdrnwrfc
     export err=$?;err_chk
     echo '     err=' $? 
 
@@ -188,7 +188,7 @@ do
     export FORT31=" "
     export FORT51="grib2.$day.t${hh}z.awpurmapcp.$region.$ac"
     startmsg
-#    $TOCGRIB2 < $PARMurma/$wmoheader
+    $TOCGRIB2 < $PARMurma/$wmoheader
     export err=$?; echo "After $pgm, err=$err"; err_chk
   fi
 
