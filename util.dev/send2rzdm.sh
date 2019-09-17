@@ -70,7 +70,7 @@ do
     cd $COMOUT/pcpurma.$vday/wmo
     scp $awips184 $awips188 wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/wmo/.
   else
-    urmafile=pcpurma_${region}.${date}.$acc.grb2
+    urmafile=pcpurma_${region}.${vdate}.$acc.grb2
     awipsfile=grib2.t${vhr}z.awpurmapcp.$region.$acc
     cd $COMOUT/pcpurma.$vday/wmo
     scp $awipsfile wd22yl@emcrzdm:$RZDMDIR/pcpurma.$vday/wmo/.
