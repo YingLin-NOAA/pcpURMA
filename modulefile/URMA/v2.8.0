@@ -1,7 +1,7 @@
 #%Module######################################################################
 ##                                                       Manuel.Pondeca@noaa.gov
 ##                                                           NOAA/NWS/NCEP/EMC
-## URMA v2.7.3
+## URMA v2.8.0
 ##_____________________________________________________
 proc ModulesHelp { } {
 puts stderr "Set environment veriables for URMA"
@@ -10,7 +10,7 @@ puts stderr "for the Intel Compiler Suite $version\n"
 }
 module-whatis " URMA whatis description"
 
-set ver v2.7.3
+set ver v2.8.0
 
 set sys [uname sysname]
 #set URMA /nwprod2/urma.v2.7.2/modulefile/URMA

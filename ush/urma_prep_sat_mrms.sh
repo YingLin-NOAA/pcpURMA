@@ -71,7 +71,7 @@ do
     cdate=`$NDATE -1 $date`
     cday=${cdate:0:8}
     cmorphfile=CMORPH_8KM-30MIN_$cdate
-    dcomdir=$DCOMROOT/us007003/$cday/wgrbbul/cpc_rcdas
+    dcomdir=$DCOMROOT/prod/$cday/wgrbbul/cpc_rcdas
     if [ -s $dcomdir/$cmorphfile ]
     then
       ln -sf $PARMurma/grib2_pds.tbl  fort.11

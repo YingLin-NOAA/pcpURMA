@@ -25,7 +25,7 @@ export logs_dir=$BASE/logs
 . /usrx/local/prod/lmod/lmod/init/ksh    #dell
 module purge
 module use -a ${BASE}/../modulefile
-module load URMA/v2.7.3
+module load URMA/v2.8.0
 
 module list
 
@@ -125,17 +125,6 @@ if [ $BUILD_urma_minrh = yes ] ; then
 
 echo " .... Building urma_minrh .... "
 ./build_urma_minrh.sh > $logs_dir/build_urma_minrh.log 2>&1
-
-fi
-
-cd $BASE
-
-##############################
-
-if [ $BUILD_pcpurma_changepds = yes ] ; then
-
-echo " .... Building pcpurma_changepds .... "
-./build_pcpurma_changepds.sh > $logs_dir/build_pcpurma_changepds.log 2>&1
 
 fi
 
