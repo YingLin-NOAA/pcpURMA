@@ -36,7 +36,7 @@ COMOUT=/gpfs/dell2/ptmp/Ying.Lin/pcpanl
 todosnow=$COMOUT/pcpurma.$day0/todo_snow.$date0
 todourma=$COMOUT/pcpanl.$day0/todo_urma.$date0
 
-RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0
+RZDMDIR=/home/ftp/emc/mmb/precip/urma.v2.8.0.noblend
 
 for item in `cat $todosnow`
 do
