@@ -32,7 +32,7 @@ pwd
 
 # For wgrib2's new_grid: 
 WG2wexp="lambert:265:25:25 233.723448:2345:2539.703 19.228976:1597:2539.703"
-WG2pack="c1 -set_bitmap 1"
+WG2pack="jpeg -set_bitmap 1"
 
 # process the NOHRSC files: for 6h/24h snowfall analysis covering a 24h period
 # ending at 12Z $day (day=PDY, PDYm1, PDYm2, PDYm3, PDYm5, PDYm7), add WMO 
@@ -127,6 +127,7 @@ do
 # option: 
   $WGRIB2 $nohrscfile \
     -set_grib_type ${WG2pack} \
+    -new_grid_winds grid \
     -new_grid_interpolation neighbor \
     -new_grid ${WG2wexp} \
      snowfall_wexp.$vdate.$ac.grb2
