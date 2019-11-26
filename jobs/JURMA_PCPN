@@ -103,14 +103,7 @@ else                          ### for developer
     export PDY=${pdyhh:0:8}
   fi
   setpdy.sh 9 1  # Create PDY file for PDYm9, PDYm8, ..., PDYp1
-  # For some reason the system cannot find the 'PDY' in this directory,
-  # but the problem goes away when I added the follow two lines ('pwd' and 'ls')
-  pwd
-  ls -lt PDY
-  # sometimes waiting 5 seconds before doing ". PDY" works, but sometimes not.
-  # try ". ./PDY":
-  . ./PDY 
-  # test
+  . PDY 
 fi
 
 ##############################################
