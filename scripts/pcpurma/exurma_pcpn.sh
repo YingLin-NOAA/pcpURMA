@@ -65,7 +65,9 @@ do
   if [ $region = conus ]; then
     urmawexp=pcpurma_wexp.$date.$ac.grb2
     urma184=pcpurma_g184.$date.$ac.grb2
+    urma184_tmp=tmp_pcpurma_g184.$date.$ac.grb2
     urma188=pcpurma_g188.$date.$ac.grb2
+    urma188_tmp=tmp_pcpurma_g188.$date.$ac.grb2
   else
     urmafile=pcpurma_${region}.$date.$ac.grb2
   fi
@@ -104,12 +106,26 @@ do
     #   g188(1,1) = wexp(201,803)
     #   g188(709,795) = wexp(909,1597)
 
-    $WGRIB2 $urmawexp -ijsmall_grib 201:2345 1:1377  $urma184
+    $WGRIB2 $urmawexp -ijsmall_grib 201:2345 1:1377  $urma184_tmp
     wmohdrconus=grib2_pcpurma_g184.$ac
 
+    # Change to WMO header for $urma184
+    ln -sf $urma184_tmp          fort.11
+    ln -sf $urma184              fort.51
+    ${EXECurma}/pcpurma_change2wmohdr
+    export err=$?;err_chk
+    echo '     err=' $?
+
     # Map to 2.5km NWRFC NDFD grid:
-    $WGRIB2 $urmawexp -ijsmall_grib 201:909 803:1597 $urma188 
+    $WGRIB2 $urmawexp -ijsmall_grib 201:909 803:1597 $urma188_tmp 
     wmohdrnwrfc=grib2_pcpurma_g188.$ac
+
+    # Change to WMO header for $urma188
+    ln -sf $urma188_tmp          fort.11
+    ln -sf $urma188              fort.51
+    ${EXECurma}/pcpurma_change2wmohdr
+    export err=$?;err_chk
+    echo '     err=' $?
 
   elif [ $region = pr ]; then
     wmoheader=grib2_pcpurma_prico_125km.$ac

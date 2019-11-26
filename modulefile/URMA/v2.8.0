@@ -56,3 +56,10 @@ module load sp/2.0.2
 setenv COMP ifort
 setenv COMP_MP mpif90
 setenv COMP_MPI mpiifort
+
+# user library for pcpurma:
+setenv WGRIB2LIB /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.8.0/lib/grib2/lib/libwgrib2.a
+setenv WGRIB2INC /gpfs/dell2/emc/verification/noscrub/Ying.Lin/pcpanl/urma.v2.8.0/lib/grib2/lib
+# NCO: please replace the above with the following:
+# setenv WGRIB2LIB /gpfs/dell1/nco/ops/nw${envir}/urma.${ver}/lib/grib2/lib/libwgrib2.a
+# setenv WGRIB2INC /gpfs/dell1/nco/ops/nw${envir}/urma.${ver}/lib/grib2/lib
