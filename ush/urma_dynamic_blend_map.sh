@@ -1,15 +1,15 @@
 #!/bin/ksh
 
 #BSUB -J bldgmap
-#BSUB -o /gpfs/dell2/ptmp/Yan.Luo/cron.out/bmap.out.%J
-#BSUB -e /gpfs/dell2/ptmp/Yan.Luo/cron.out/bmap.out.%J
+#BSUB -o /gpfs/dell2/ptmp/Ying.Lin/cron.out/bmap.out.%J
+#BSUB -e /gpfs/dell2/ptmp/Ying.Lin/cron.out/bmap.out.%J
 #BSUB -n 64
 ##BSUB -n 16
 #BSUB -R "rusage[mem=4000]"
 #BSUB -R span[ptile=8]
 ##BSUB -R span[ptile=8]
 #BSUB -R "affinity[core]"
-#BSUB -cwd /gpfs/dell2/ptmp/Yan.Luo
+#BSUB -cwd /gpfs/dell2/ptmp/Ying.Lin
 #BSUB -W 00:05
 #BSUB -P RTMA-T2O
 #BSUB -q "dev"
