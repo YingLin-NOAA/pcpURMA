@@ -64,12 +64,9 @@ ijdel=300                                                                       
                                                                                      #              
 cd $DATA/sat_mrms_fill                                                               #
 rm TMP.dat rd2.out                                                                   #
-cp -p $PARMurma/BLENDING_MAP/blending_map_mpi.f90 .                                  #
 cp -p slabs_blend.dat TMP.dat                                                        #
 
 ################ END CHANGES #########################################################
-
-mpif90 -O3 -fp-model strict -convert big_endian -traceback -free -o bmap.exe blending_map_mpi.f90
 
 cat <<  EOF > domain_conf_input
 &domain_conf
@@ -79,7 +76,7 @@ cat <<  EOF > domain_conf_input
 /
 EOF
 
-${MPIEXEC} ./bmap.exe >stdout 2>errfile
+${MPIEXEC} $EXECurma/pcpurma_blend_map_mpi >stdout 2>errfile
 
 echo "End Time is `date` "
 

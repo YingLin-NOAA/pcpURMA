@@ -18,6 +18,7 @@ export BUILD_urma_minrh=yes
 export BUILD_pcpurma_cmorph30min2grb=yes
 export BUILD_pcpurma_sat_mrms_fill=yes
 export BUILD_pcpurma_change2wmohdr=yes
+export BUILD_pcpurma_blend_map_mpi=yes
 
 mkdir $BASE/logs
 export logs_dir=$BASE/logs
@@ -164,4 +165,16 @@ echo " .... Building pcpurma_change2wmohdr .... "
 fi
 
 cd $BASE
+
+##############################
+
+if [ $BUILD_pcpurma_blend_map_mpi = yes ] ; then
+
+echo " .... Building pcpurma_blend_map_mpi .... "
+./build_pcpurma_blend_map_mpi.sh > $logs_dir/build_pcpurma_blend_map_mpi.log 2>&1
+
+fi
+
+cd $BASE
+
 
