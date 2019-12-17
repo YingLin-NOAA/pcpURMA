@@ -26,6 +26,7 @@ export FIXurma=$HOMEurma/fix/pcpurma
 export USHurma=$HOMEurma/ush
 # Parm files needed for toc2grib2, to add WMO header:
 export PARMurma=$HOMEurma/parm/pcpurma
+export PARMwmourma=$HOMEurma/parm/wmo/pcpurma
 export EXECurma=$HOMEurma/exec
 export SCRIPTurma=$HOMEurma/scripts/pcpurma
 
@@ -33,9 +34,8 @@ export MRMSDIR=$DCOMROOT/prod/ldmdata/obs/upperair/mrms/conus
 export DCOMSNOW=/gpfs/dell2/ptmp/Ying.Lin/dcom/prod
 
 ####################################
-# finddate.sh is not in prod_util, but prod_util does define UTIL_ROOT:
+# finddate.sh is not in prod_util, but prod_util does define UTIL_ROOT. 
 ####################################
-export FINDDATE=$UTILROOT/ush/finddate.sh
 
 if [ $RUN_ENVIR = dev ]; then   # for developers
   export DATAROOT=/gpfs/dell2/stmp/Ying.Lin/pcpanl
@@ -77,17 +77,6 @@ export jlogfile=$DATAROOT/jlogfile
 # Determine Job Output Name on System
 ####################################
 export pgmout="OUTPUT.$$"
-
-#########################################################################
-# Add some prod utilities to working directory
-#########################################################################
-cd $DATA
-echo "step ############# break ##############################" > ./break
-cp $UTILROOT/ush/err_chk   .; chmod +x err_chk
-cp $UTILROOT/ush/err_exit  .; chmod +x err_exit
-cp $UTILROOT/ush/prep_step .; chmod +x prep_step
-cp $UTILROOT/ush/postmsg   .; chmod +x postmsg
-cp $UTILROOT/ush/setpdy.sh .; chmod +x setpdy.sh
 
 #########################################
 #########################################

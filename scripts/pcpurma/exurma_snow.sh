@@ -46,7 +46,7 @@ rm -f $todolist
 
 for day in $PDYm7 $PDYm5 $PDYm3 $PDYm2 $PDYm1 $PDY
 do
-  daym1=`$FINDDATE $day d-1`
+  daym1=`date -d "$day - 1 day" +%Y%m%d`
   vdate=${daym1}18
   while [ $vdate -le ${day}12 ]
   do
@@ -108,7 +108,7 @@ do
     ac_nohrsc=24h
   fi
   nohrscfile=sfav2_CONUS_${ac_nohrsc}_${vdate}_grid184.grb2
-  snowparm=$PARMurma/grib2_sfav2_asnow_g184.$ac
+  snowparm=$PARMwmourma/grib2_sfav2_asnow_g184.$ac
   awipsfile=grib2.t${vhr}z.snowfall.184.$ac
     
   # Add WMO header:

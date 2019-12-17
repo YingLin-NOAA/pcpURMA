@@ -19,6 +19,7 @@ export BUILD_pcpurma_cmorph30min2grb=yes
 export BUILD_pcpurma_sat_mrms_fill=yes
 export BUILD_pcpurma_change2wmohdr=yes
 export BUILD_pcpurma_blend_map_mpi=yes
+export BUILD_grib2_lib=yes
 
 mkdir $BASE/logs
 export logs_dir=$BASE/logs
@@ -178,3 +179,17 @@ fi
 cd $BASE
 
 
+##############################
+
+if [ $BUILD_grib2_lib = yes ] ; then
+
+echo " .... Building grib2/wgrib2 library .... "
+cd ../lib/grib2
+build_wgrib2.sh > $logs_dir/build_wgrib2_lib.log 2>&1
+
+export BUILD_grib2_lib=yes
+
+
+fi
+
+cd $BASE
