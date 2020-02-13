@@ -53,14 +53,14 @@ do
     snow6h=sfav2_CONUS_6h_${vdate}_grid184.grb2
     vday=${vdate:0:8}
     vhr=${vdate:8:2}
-    cp $DCOMSNOW/$vday/wgrbbul/qpe/$snow6h .
+    cp $DCOMSNOW/$vday/wgrbbul/nohrsc_snowfall/$snow6h .
     if [ -s $snow6h ]; then
       echo $vdate.06h >> $todolist
     fi
 
     if [ $vhr -eq 12 ]; then
       snow24h=sfav2_CONUS_24h_${vdate}_grid184.grb2
-      cp $DCOMSNOW/$vday/wgrbbul/qpe/$snow24h .
+      cp $DCOMSNOW/$vday/wgrbbul/nohrsc_snowfall/$snow24h .
       if [ -s $snow24h ]; then
         echo $vdate.24h >> $todolist
       fi

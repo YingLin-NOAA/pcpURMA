@@ -31,7 +31,7 @@ export EXECurma=$HOMEurma/exec
 export SCRIPTurma=$HOMEurma/scripts/pcpurma
 
 export MRMSDIR=$DCOMROOT/prod/ldmdata/obs/upperair/mrms/conus
-export DCOMSNOW=/gpfs/dell2/ptmp/Ying.Lin/dcom/prod
+export DCOMSNOW=$DCOMROOT/dev
 
 ####################################
 # finddate.sh is not in prod_util, but prod_util does define UTIL_ROOT. 
