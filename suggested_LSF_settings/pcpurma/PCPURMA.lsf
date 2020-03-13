@@ -4,11 +4,11 @@
 #BSUB -o /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
 #BSUB -e /gpfs/dell2/ptmp/Ying.Lin/cron.out/urma.%J
 #BSUB -W 0:45
-#BSUB -n 1
+#BSUB -n 64
+#BSUB -R span[ptile=8]
 #BSUB -q "dev_shared"
-#BSUB -R "rusage[mem=1500]"
-#BSUB -R affinity[core(1)]
-#BSUB -R span[ptile=1]
+#BSUB -R "rusage[mem=4000]"
+#BSUB -R affinity[core]
 
 set -x
 

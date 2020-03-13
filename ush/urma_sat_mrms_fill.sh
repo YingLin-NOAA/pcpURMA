@@ -45,7 +45,7 @@ then
  # Generating a dynamic blending map
  if [ $err3 != 0 ]
  then
-  bsub < $USHurma/urma_dynamic_blend_map.sh
+  $USHurma/urma_dynamic_blend_map.sh
 
   cd $DATA/sat_mrms_fill
     icnt=0
