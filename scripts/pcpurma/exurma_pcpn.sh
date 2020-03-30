@@ -106,7 +106,7 @@ do
     #   g188(1,1) = wexp(201,803)
     #   g188(709,795) = wexp(909,1597)
 
-    $WGRIB2 $urmawexp -ijsmall_grib 201:2345 1:1377  $urma184_tmp
+    $WGRIB2 $urmawexp -set_grib_type c1 -ijsmall_grib 201:2345 1:1377  $urma184_tmp
     wmohdrconus=grib2_pcpurma_g184.$ac
 
     # Change to WMO header for $urma184
@@ -117,7 +117,7 @@ do
     echo '     err=' $?
 
     # Map to 2.5km NWRFC NDFD grid:
-    $WGRIB2 $urmawexp -ijsmall_grib 201:909 803:1597 $urma188_tmp 
+    $WGRIB2 $urmawexp -set_grib_type c1 -ijsmall_grib 201:909 803:1597 $urma188_tmp 
     wmohdrnwrfc=grib2_pcpurma_g188.$ac
 
     # Change to WMO header for $urma188
