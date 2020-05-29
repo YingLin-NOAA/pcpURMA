@@ -82,12 +82,17 @@ do
   if [ $region = conus ]; then
     # map to the 2.5km 2345x1597 west-expanded ConUS grid (wexp)
     $WGRIB2 $st4file \
+      -set_radius 1:6371200 \
       -set_grib_type ${WG2pack} \
       -set analysis_or_forecast_process_id 118 \
       -new_grid_winds grid \
       -new_grid_interpolation budget \
       -new_grid ${WG2wexp} \
-      $urmawexp
+      ${urmawexp}_tmp
+
+    $WGRIB2 ${urmawexp}_tmp -set_radius 1:6371200 -grib $urmawexp
+    rm -f ${urmawexp}_tmp
+
 
     # If valid time is at least 24h ago, fill in with MRMS and CMORPH:
     if [ $date -le $date0m24h ]
@@ -191,7 +196,10 @@ do
       -new_grid_winds grid \
       -new_grid_interpolation budget \
       -new_grid ${WG2oconus} \
-      $urmafile
+      ${urmafile}_tmp
+    $WGRIB2  ${urmafile}_tmp -set_radius 1:6371200 -grib  $urmafile
+    rm -f ${urmafile}_tmp
+
     #####################################################################
     #    Process PRECIP URMA FOR AWIPS
     #####################################################################

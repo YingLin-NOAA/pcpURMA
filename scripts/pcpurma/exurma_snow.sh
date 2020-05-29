@@ -130,7 +130,10 @@ do
     -new_grid_winds grid \
     -new_grid_interpolation neighbor \
     -new_grid ${WG2wexp} \
-     snowfall_wexp.$vdate.$ac.grb2
+     snowfall_wexp.$vdate.$ac.tmp.grb2
+
+  $WGRIB2 snowfall_wexp.$vdate.$ac.tmp.grb2 -set_radius 1:6371200 -grib snowfall_wexp.$vdate.$ac.grb2
+  rm -f snowfall_wexp.$vdate.$ac.tmp.grb2
 
   if test $SENDCOM = 'YES'
   then
